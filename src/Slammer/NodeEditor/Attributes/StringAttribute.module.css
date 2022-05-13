@@ -1,0 +1,5 @@
+.label {
+  color: hsl(var(--hue), 100%, 27%);
+  font-family: "Attribute";
+  line-height: 15px;
+}

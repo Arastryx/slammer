@@ -1,11 +1,23 @@
 .editor {
   --hue: 355;
-  padding: 10px;
+  padding: 16px;
   background-color: hsl(var(--hue), 100%, 80%);
   border-width: 5px;
   border-style: solid;
-  border-top-color: hsl(var(--hue), 100%, 86%);
-  border-left-color: hsl(var(--hue), 100%, 86%);
-  border-bottom-color: hsl(var(--hue), 77%, 65%);
-  border-right-color: hsl(var(--hue), 77%, 65%);
+  border-top-color: hsl(var(--hue), 100%, 89%);
+  border-left-color: hsl(var(--hue), 100%, 89%);
+  border-bottom-color: hsl(var(--hue), 77%, 55%);
+  border-right-color: hsl(var(--hue), 77%, 55%);
+}
+
+.header {
+  background-color: hsl(var(--hue), 83%, 72%);
+  padding: 8px 10px;
+  margin-bottom: 10px;
+}
+
+.label {
+  color: hsl(var(--hue), 100%, 23%);
+  font-family: "Header";
+  line-height: 17px;
 }

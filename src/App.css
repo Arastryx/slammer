@@ -1,1 +1,9 @@
+@font-face {
+  font-family: "Header";
+  src: url("./Fonts/nulshock.ttf");
+}
 
+@font-face {
+  font-family: "Attribute";
+  src: url("./Fonts/FROSTBITE-Narrow.ttf");
+}

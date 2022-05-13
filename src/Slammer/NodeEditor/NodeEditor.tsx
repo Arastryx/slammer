@@ -15,12 +15,14 @@ export const NodeEditor: React.FC<NodeEditorProps> = ({ slam, depth = 0 }) => {
       className={styles.editor}
       style={{ "--hue": depth * 60 } as React.CSSProperties}
     >
-      <h1>{slam.name}</h1>
-      <Stack gap={20} style={{ padding: 10 }}>
-        {slam.attributes?.map((a) => (
-          <StringAttribute attribute={a} />
-        ))}
-      </Stack>
+      <div className={styles.header}>
+        <Stack gap={20} alignment="end" style={{ justifyContent: "start" }}>
+          <div className={styles.label}>{slam.name}</div>
+          {slam.attributes?.map((a) => (
+            <StringAttribute attribute={a} />
+          ))}
+        </Stack>
+      </div>
 
       {slam.elements?.map((e) => (
         <NodeEditor slam={e} depth={depth + 1} />

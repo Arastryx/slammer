@@ -10,26 +10,14 @@ export const Slammer: React.FC<SlammerProps> = ({}) => {
       <NodeEditor
         slam={{
           name: "Character",
-          attributes: [{ name: "name", type: "string" }],
+          attributes: [
+            { name: "name", type: "string" },
+            { name: "otherThing", type: "string" },
+          ],
           elements: [
             {
-              name: "ResourcePacks",
-              elements: [
-                {
-                  name: "ResourcePacks",
-                  elements: [
-                    {
-                      name: "ResourcePacks",
-                      elements: [
-                        {
-                          name: "ResourcePacks",
-                          elements: [{ name: "ResourcePacks" }],
-                        },
-                      ],
-                    },
-                  ],
-                },
-              ],
+              name: "Coolness",
+              attributes: [{ name: "wow", type: "string" }],
             },
           ],
         }}
