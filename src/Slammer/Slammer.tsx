@@ -1,33 +1,36 @@
-import { Button } from "antd";
 import { XMLBuilder, XMLParser } from "fast-xml-parser";
-import React from "react";
+import React, { useMemo } from "react";
+import { JsonifiedXML } from "./jsonifiedXml";
 import { NodeEditor } from "./NodeEditor/NodeEditor";
 import styles from "./Slammer.module.css";
+
+const parser = new XMLParser({
+  parseAttributeValue: true,
+  ignoreAttributes: false,
+  preserveOrder: true,
+  attributeNamePrefix: "",
+});
+
+const builder = new XMLBuilder({
+  preserveOrder: true,
+  ignoreAttributes: false,
+  suppressEmptyNode: true,
+  attributeNamePrefix: "",
+  suppressBooleanAttributes: false,
+  format: true,
+});
+
+const test: JsonifiedXML[] = parser.parse(
+  '<Test value="cool"><Inner value="52"/></Test>'
+);
 
 export interface SlammerProps {}
 
 export const Slammer: React.FC<SlammerProps> = ({}) => {
-  const testXml = () => {
-    const parser = new XMLParser({
-      parseAttributeValue: true,
-      ignoreAttributes: false,
-      preserveOrder: true,
-      attributeNamePrefix: "",
-    });
-    const what = parser.parse(
-      '<Character also="this" number="52" bool="true"><Action thing="wow"/><Cool test="please"/><Action thing="what"/></Character>'
-    );
-
-    const builder = new XMLBuilder({
-      preserveOrder: true,
-      ignoreAttributes: false,
-      suppressEmptyNode: true,
-      attributeNamePrefix: "",
-      suppressBooleanAttributes: false,
-    });
-    const test = builder.build(what);
-    const b = 0;
-  };
+  const output = useMemo(
+    () => (builder.build(test) as string).substring(1),
+    []
+  );
 
   return (
     <div id={styles.slammer}>
@@ -46,9 +49,10 @@ export const Slammer: React.FC<SlammerProps> = ({}) => {
           ],
         }}
       />
-      <Button id={styles.slam} type="primary" block onClick={testXml}>
-        SLAM
-      </Button>
+      <pre className={styles.output}>
+        {'<?xml version="1.0" encoding="utf-8"?>\n'}
+        {output}
+      </pre>
     </div>
   );
 };

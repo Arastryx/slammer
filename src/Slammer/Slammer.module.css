@@ -10,3 +10,13 @@
   height: 150px;
   font-size: 50px;
 }
+
+.output {
+  margin-top: 10px;
+  background-color: white;
+  border-radius: 10px;
+  padding: 10px;
+  max-height: 500px;
+  overflow-y: auto;
+  font-family: "Courier New", Courier, monospace;
+}
