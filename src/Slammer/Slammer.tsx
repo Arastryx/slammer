@@ -3,6 +3,7 @@ import React, { useMemo, useState } from "react";
 import { NodeEditor } from "./NodeEditor/NodeEditor";
 import styles from "./Slammer.module.css";
 import { SlamContext, SlamElement } from "./SlamXML";
+import { build, SlamEditorElement, toJsonifiedXML } from "./SlamXML/slam";
 
 // const parser = new XMLParser({
 //   parseAttributeValue: true,
@@ -33,27 +34,16 @@ const slamElement: SlamElement = {
   elements: [
     {
       name: "Moves",
-      elements: [
-        {
-          name: "Moves",
-          elements: [
-            {
-              name: "Moves",
-              elements: [
-                {
-                  name: "Moves",
-                },
-              ],
-            },
-          ],
-        },
-      ],
+      attributes: [{ name: "theBigTest", type: "string" }],
     },
   ],
 };
 
 export const Slammer: React.FC<SlammerProps> = ({}) => {
-  const [data, setData] = useState<any>();
+  const [editorData, setEditorData] = useState<SlamEditorElement>(
+    build(slamElement)
+  );
+  const [data, setData] = useState(toJsonifiedXML(editorData));
 
   const output = useMemo(
     () => (data ? (builder.build([data]) as string).substring(1) : undefined),
@@ -62,8 +52,14 @@ export const Slammer: React.FC<SlammerProps> = ({}) => {
 
   return (
     <div id={styles.slammer}>
-      <SlamContext element={slamElement} data={data} onChange={setData}>
-        <NodeEditor slam={slamElement} />
+      <SlamContext
+        element={slamElement}
+        data={data}
+        onDataChange={setData}
+        editorData={editorData}
+        onEditorChange={setEditorData}
+      >
+        <NodeEditor def={slamElement} data={editorData} index={[]} />
       </SlamContext>
 
       <pre className={styles.output}>

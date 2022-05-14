@@ -16,10 +16,8 @@ import {
 } from "./slam";
 
 export interface SlamContextData {
-  editorData?: SlamEditorElement;
-  setEditorData: React.Dispatch<
-    React.SetStateAction<SlamEditorElement | undefined>
-  >;
+  editorData: SlamEditorElement;
+  onEditorChange?: (data: SlamEditorElement) => void;
 }
 
 const SlamContextContext = createContext<SlamContextData | null>(null);
@@ -28,32 +26,37 @@ export interface SlamContextProps {
   children?: React.ReactNode;
   element: SlamElementDefinition;
   data?: any;
-  onChange?: (data?: any) => void;
+  editorData: SlamEditorElement;
+  onDataChange?: (data?: any) => void;
+  onEditorChange?: (data: SlamEditorElement) => void;
 }
 
 export const SlamContext: React.FC<SlamContextProps> = ({
   children,
   element,
   data,
-  onChange,
+  editorData,
+  onDataChange,
+  onEditorChange,
 }) => {
-  const [editorData, setEditorData] = useState<SlamEditorElement>();
-
   useEffect(() => {
-    setEditorData(build(element));
-  }, [element]);
+    onEditorChange && onEditorChange(build(element));
+  }, [element, onEditorChange]);
 
   useDebouncedEffect(
     () => {
-      if (editorData && onChange) {
-        onChange(toJsonifiedXML(editorData));
+      if (editorData && onDataChange) {
+        onDataChange(toJsonifiedXML(editorData));
       }
     },
     300,
     [editorData]
   );
 
-  const value = useMemo(() => ({ editorData, setEditorData }), [editorData]);
+  const value = useMemo(
+    () => ({ editorData, onEditorChange }),
+    [editorData, onEditorChange]
+  );
 
   return (
     <SlamContextContext.Provider value={value}>
@@ -62,7 +65,17 @@ export const SlamContext: React.FC<SlamContextProps> = ({
   );
 };
 
+function getElement(
+  target: SlamEditorElement,
+  index: number[]
+): SlamEditorElement {
+  return index.length === 0
+    ? target
+    : getElement(target.elements![index[0]], index.slice(1));
+}
+
 export function useSlamAttribute<T extends string | number | boolean>(
+  index: number[],
   name: string
 ): [T | undefined, (value: T | undefined) => void] {
   const result = useContext(SlamContextContext);
@@ -73,33 +86,27 @@ export function useSlamAttribute<T extends string | number | boolean>(
     );
   }
 
-  const getAttribute = useCallback(
-    (name: string) => {
-      return result.editorData?.attributes?.find((a) => a.name === name);
-    },
-    [result.editorData]
+  const value = useMemo(
+    () =>
+      result.editorData?.attributes?.find((a) => a.name === name)?.value as
+        | T
+        | undefined,
+    [name, result.editorData?.attributes]
   );
 
-  const setAttribute = useCallback(
-    (name: string, value?: string | number | boolean) => {
+  const setValue = useCallback(
+    (value: T | undefined) => {
       const element = cloneDeep(result.editorData);
-      const attribute = element?.attributes?.find((a) => a.name === name);
+      const attribute = getElement(element, index).attributes?.find(
+        (a) => a.name === name
+      );
 
       if (attribute) {
         attribute.value = value;
-        result.setEditorData(element);
+        result.onEditorChange && result.onEditorChange(element);
       }
     },
-    [result]
-  );
-
-  const value = useMemo(
-    () => getAttribute(name)?.value as T | undefined,
-    [getAttribute, name]
-  );
-  const setValue = useCallback(
-    (value: T | undefined) => setAttribute(name, value),
-    [name, setAttribute]
+    [index, name, result]
   );
 
   return [value, setValue];

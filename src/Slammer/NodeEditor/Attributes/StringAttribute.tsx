@@ -7,12 +7,14 @@ import styles from "./StringAttribute.module.css";
 
 export interface StringAttributeProps {
   attribute: SlamAttributeDefinition;
+  index: number[];
 }
 
 export const StringAttribute: React.FC<StringAttributeProps> = ({
   attribute,
+  index,
 }) => {
-  const [value, setValue] = useSlamAttribute<string>(attribute.name);
+  const [value, setValue] = useSlamAttribute<string>(index, attribute.name);
 
   return (
     <Stack gap={4} alignment="end" style={{ justifyContent: "start" }}>

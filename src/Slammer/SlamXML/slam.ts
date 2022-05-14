@@ -27,13 +27,21 @@ export type SlamEditorAttribute =
 
 export interface SlamEditorElement {
   name: string;
+  id: number;
   attributes?: SlamEditorAttribute[];
   elements?: SlamEditorElement[];
+}
+
+let idCounter = 1;
+
+function getId() {
+  return idCounter++;
 }
 
 export function build(def: SlamElementDefinition): SlamEditorElement {
   return {
     name: def.name,
+    id: getId(),
     attributes: def.attributes?.map((a) => ({
       name: a.name,
       value: "",
