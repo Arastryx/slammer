@@ -1,8 +1,8 @@
 import React from "react";
 import { Stack } from "../../Common/Stack";
-import { StringAttribute } from "./Attributes/StringAttribute";
 import styles from "./NodeEditor.module.css";
 import { SlamEditorElement, SlamElementDefinition } from "../SlamXML/slam";
+import { AttributeEditor } from "./Attributes";
 
 export interface NodeEditorProps {
   def?: SlamElementDefinition;
@@ -21,10 +21,10 @@ export const NodeEditor: React.FC<NodeEditorProps> = ({ def, data, index }) => {
       style={{ "--hue": index.length * 60 } as React.CSSProperties}
     >
       <div className={styles.header}>
-        <Stack gap={20} alignment="end" style={{ justifyContent: "start" }}>
+        <Stack gap={30} alignment="end" style={{ justifyContent: "start" }}>
           <div className={styles.label}>{data.name}</div>
           {def.attributes?.map((a) => (
-            <StringAttribute key={a.name} attribute={a} index={index} />
+            <AttributeEditor key={a.name} attribute={a} index={index} />
           ))}
         </Stack>
       </div>

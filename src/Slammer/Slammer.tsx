@@ -30,7 +30,11 @@ export interface SlammerProps {}
 
 const slamElement: SlamElement = {
   name: "Character",
-  attributes: [{ name: "cool", type: "string" }],
+  attributes: [
+    { name: "cool", type: "string" },
+    { name: "num", type: "number" },
+    { name: "bool", type: "boolean" },
+  ],
   elements: [
     {
       name: "Moves",
