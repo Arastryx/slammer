@@ -38,14 +38,17 @@ export function build(def: SlamElementDefinition): SlamEditorElement {
       name: a.name,
       value: "",
     })),
+    elements: def.elements?.map((e) => build(e)),
   };
 }
 
 export function toJsonifiedXML(element: SlamEditorElement): any {
   return {
-    [element.name]: [],
+    [element.name]: element.elements?.map((e) => toJsonifiedXML(e)) ?? [],
     ":@": Object.fromEntries(
-      element.attributes?.map((a) => [a.name, a.value]) ?? []
+      element.attributes
+        ?.filter((a) => a.value)
+        .map((a) => [a.name, a.value]) ?? []
     ),
   };
 }

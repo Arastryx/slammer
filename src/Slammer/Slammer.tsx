@@ -11,6 +11,11 @@ import { SlamContext, SlamElement } from "./SlamXML";
 //   attributeNamePrefix: "",
 // });
 
+// const test = parser.parse(
+//   '<Character cool="Test" thing="otherTest"><Moves></Moves></Character>'
+// );
+// console.log("proper:", test);
+
 const builder = new XMLBuilder({
   preserveOrder: true,
   ignoreAttributes: false,
@@ -24,9 +29,26 @@ export interface SlammerProps {}
 
 const slamElement: SlamElement = {
   name: "Character",
-  attributes: [
-    { name: "cool", type: "string" },
-    { name: "thing", type: "string" },
+  attributes: [{ name: "cool", type: "string" }],
+  elements: [
+    {
+      name: "Moves",
+      elements: [
+        {
+          name: "Moves",
+          elements: [
+            {
+              name: "Moves",
+              elements: [
+                {
+                  name: "Moves",
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    },
   ],
 };
 

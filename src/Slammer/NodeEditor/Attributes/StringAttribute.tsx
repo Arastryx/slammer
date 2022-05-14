@@ -1,11 +1,8 @@
 import { Input } from "antd";
-import React, { useMemo } from "react";
+import React from "react";
 import { Stack } from "../../../Common/Stack";
-import {
-  SlamAttributeDefinition,
-  SlamEditorStringAttribute,
-} from "../../SlamXML/slam";
-import { useSlamContext } from "../../SlamXML/SlamContext";
+import { SlamAttributeDefinition } from "../../SlamXML/slam";
+import { useSlamAttribute } from "../../SlamXML/SlamContext";
 import styles from "./StringAttribute.module.css";
 
 export interface StringAttributeProps {
@@ -15,12 +12,7 @@ export interface StringAttributeProps {
 export const StringAttribute: React.FC<StringAttributeProps> = ({
   attribute,
 }) => {
-  const { getAttribute, setAttribute } = useSlamContext();
-
-  const attributeData = useMemo(
-    () => getAttribute(attribute.name) as SlamEditorStringAttribute | undefined,
-    [attribute.name, getAttribute]
-  );
+  const [value, setValue] = useSlamAttribute<string>(attribute.name);
 
   return (
     <Stack gap={4} alignment="end" style={{ justifyContent: "start" }}>
@@ -28,8 +20,8 @@ export const StringAttribute: React.FC<StringAttributeProps> = ({
       <Input
         style={{ width: 180 }}
         size="small"
-        value={attributeData?.value}
-        onChange={(v) => setAttribute(attribute.name, v.currentTarget.value)}
+        value={value}
+        onChange={(v) => setValue(v.currentTarget.value)}
       />
     </Stack>
   );
