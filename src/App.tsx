@@ -1,6 +1,6 @@
 import "./App.css";
-import { Slammer } from "./Slammer/Slammer";
 import "antd/dist/antd.css";
+import { Slammer } from "./Slammer";
 
 function App() {
   return <Slammer />;

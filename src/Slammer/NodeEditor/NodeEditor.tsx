@@ -2,7 +2,7 @@ import React from "react";
 import { Stack } from "../../Stack";
 import { StringAttribute } from "./Attributes/StringAttribute";
 import styles from "./NodeEditor.module.css";
-import { SlamElement } from "./slam";
+import { SlamElement } from "../SlamXML/slam";
 
 export interface NodeEditorProps {
   slam: SlamElement;

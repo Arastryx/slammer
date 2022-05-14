@@ -1,7 +1,7 @@
 import { Input } from "antd";
 import React from "react";
 import { Stack } from "../../../Stack";
-import { SlamAttribute } from "../slam";
+import { SlamAttribute } from "../../SlamXML/slam";
 import styles from "./StringAttribute.module.css";
 
 export interface StringAttributeProps {

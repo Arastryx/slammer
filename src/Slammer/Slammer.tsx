@@ -1,15 +1,16 @@
 import { XMLBuilder, XMLParser } from "fast-xml-parser";
-import React, { useMemo } from "react";
-import { JsonifiedXML } from "./jsonifiedXml";
+import React, { useMemo, useState } from "react";
+import { JsonifiedXML } from "./SlamXML/jsonifiedXml";
 import { NodeEditor } from "./NodeEditor/NodeEditor";
 import styles from "./Slammer.module.css";
+import { SlamContext, SlamElement } from "./SlamXML";
 
-const parser = new XMLParser({
-  parseAttributeValue: true,
-  ignoreAttributes: false,
-  preserveOrder: true,
-  attributeNamePrefix: "",
-});
+// const parser = new XMLParser({
+//   parseAttributeValue: true,
+//   ignoreAttributes: false,
+//   preserveOrder: true,
+//   attributeNamePrefix: "",
+// });
 
 const builder = new XMLBuilder({
   preserveOrder: true,
@@ -20,35 +21,26 @@ const builder = new XMLBuilder({
   format: true,
 });
 
-const test: JsonifiedXML[] = parser.parse(
-  '<Test value="cool"><Inner value="52"/></Test>'
-);
-
 export interface SlammerProps {}
 
+const slamElement: SlamElement = {
+  name: "Character",
+};
+
 export const Slammer: React.FC<SlammerProps> = ({}) => {
+  const [data, setData] = useState<JsonifiedXML>();
+
   const output = useMemo(
-    () => (builder.build(test) as string).substring(1),
-    []
+    () => (builder.build([data]) as string).substring(1),
+    [data]
   );
 
   return (
     <div id={styles.slammer}>
-      <NodeEditor
-        slam={{
-          name: "Character",
-          attributes: [
-            { name: "name", type: "string" },
-            { name: "otherThing", type: "string" },
-          ],
-          elements: [
-            {
-              name: "Coolness",
-              attributes: [{ name: "wow", type: "string" }],
-            },
-          ],
-        }}
-      />
+      <SlamContext element={slamElement} data={data} onChange={setData}>
+        <NodeEditor slam={slamElement} />
+      </SlamContext>
+
       <pre className={styles.output}>
         {'<?xml version="1.0" encoding="utf-8"?>\n'}
         {output}
