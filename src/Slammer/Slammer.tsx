@@ -34,7 +34,7 @@ export const Slammer: React.FC<SlammerProps> = ({}) => {
   const [data, setData] = useState<any>();
 
   const output = useMemo(
-    () => (builder.build([data]) as string).substring(1),
+    () => (data ? (builder.build([data]) as string).substring(1) : undefined),
     [data]
   );
 

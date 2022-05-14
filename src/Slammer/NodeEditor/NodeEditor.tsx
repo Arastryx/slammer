@@ -1,11 +1,11 @@
 import React from "react";
-import { Stack } from "../../Stack";
+import { Stack } from "../../Common/Stack";
 import { StringAttribute } from "./Attributes/StringAttribute";
 import styles from "./NodeEditor.module.css";
-import { SlamElement } from "../SlamXML/slam";
+import { SlamElementDefinition } from "../SlamXML/slam";
 
 export interface NodeEditorProps {
-  slam: SlamElement;
+  slam: SlamElementDefinition;
   depth?: number;
 }
 

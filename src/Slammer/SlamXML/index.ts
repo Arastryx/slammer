@@ -1,2 +1,5 @@
 export { SlamContext } from "./SlamContext";
-export type { SlamAttribute, SlamElement } from "./slam";
+export type {
+  SlamAttributeDefinition as SlamAttribute,
+  SlamElementDefinition as SlamElement,
+} from "./slam";
