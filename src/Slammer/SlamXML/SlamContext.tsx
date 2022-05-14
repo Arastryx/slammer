@@ -1,10 +1,9 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
-import { JsonifiedXML } from "./jsonifiedXml";
+import React, { createContext, useContext, useEffect } from "react";
 import { SlamElement } from "./slam";
 import { SlamElementManager } from "./SlamElementManager";
 
 export interface SlamContextData {
-  data?: JsonifiedXML;
+  data?: any;
 }
 
 const SlamContextContext = createContext<SlamContextData | null>(null);
@@ -12,8 +11,8 @@ const SlamContextContext = createContext<SlamContextData | null>(null);
 export interface SlamContextProps {
   children?: React.ReactNode;
   element: SlamElement;
-  data?: JsonifiedXML;
-  onChange?: (data?: JsonifiedXML) => void;
+  data?: any;
+  onChange?: (data?: any) => void;
 }
 
 export const SlamContext: React.FC<SlamContextProps> = ({

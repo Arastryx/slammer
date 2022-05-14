@@ -1,6 +1,5 @@
 import { XMLBuilder, XMLParser } from "fast-xml-parser";
 import React, { useMemo, useState } from "react";
-import { JsonifiedXML } from "./SlamXML/jsonifiedXml";
 import { NodeEditor } from "./NodeEditor/NodeEditor";
 import styles from "./Slammer.module.css";
 import { SlamContext, SlamElement } from "./SlamXML";
@@ -25,10 +24,14 @@ export interface SlammerProps {}
 
 const slamElement: SlamElement = {
   name: "Character",
+  attributes: [
+    { name: "cool", type: "string" },
+    { name: "thing", type: "string" },
+  ],
 };
 
 export const Slammer: React.FC<SlammerProps> = ({}) => {
-  const [data, setData] = useState<JsonifiedXML>();
+  const [data, setData] = useState<any>();
 
   const output = useMemo(
     () => (builder.build([data]) as string).substring(1),

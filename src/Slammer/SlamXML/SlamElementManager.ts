@@ -1,4 +1,3 @@
-import { JsonifiedXML } from "./jsonifiedXml";
 import { SlamElement } from "./slam";
 
 export class SlamElementManager {
@@ -8,7 +7,12 @@ export class SlamElementManager {
     this.element = element;
   }
 
-  public toJsonifiedXML(): JsonifiedXML {
-    return { [this.element.name]: [] };
+  public toJsonifiedXML(): any {
+    return {
+      [this.element.name]: [],
+      ":@": Object.fromEntries(
+        (this.element.attributes ?? []).map((a) => [a.name, 52])
+      ),
+    };
   }
 }
