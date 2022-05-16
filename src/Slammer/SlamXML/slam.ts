@@ -9,6 +9,8 @@ export interface SlamElementDefinition {
   name: string;
   attributes?: SlamAttributeDefinition[];
   elements?: SlamElementDefinition[];
+  type?: "structure" | "slot" | "listing";
+  required?: boolean;
 }
 
 interface SlamEditorBaseAttribute<T> {
@@ -46,7 +48,7 @@ export function build(def: SlamElementDefinition): SlamEditorElement {
       name: a.name,
       value: "",
     })),
-    elements: def.elements?.map((e) => build(e)),
+    elements: def.required ? def.elements?.map((e) => build(e)) : undefined,
   };
 }
 

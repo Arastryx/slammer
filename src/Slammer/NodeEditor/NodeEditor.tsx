@@ -2,6 +2,7 @@ import React from "react";
 import { Stack } from "../../Common/Stack";
 import styles from "./NodeEditor.module.css";
 import { SlamEditorElement, SlamElementDefinition } from "../SlamXML/slam";
+import { StructureElementEditor } from "./Elements/StructureElementEditor";
 import { AttributeEditor } from "./Attributes";
 
 export interface NodeEditorProps {
@@ -29,14 +30,13 @@ export const NodeEditor: React.FC<NodeEditorProps> = ({ def, data, index }) => {
         </Stack>
       </div>
 
-      {data.elements?.map((dataElement, i) => (
-        <NodeEditor
-          key={dataElement.id}
-          def={def.elements?.find((e) => e.name === dataElement.name)}
-          data={dataElement}
-          index={index.concat(i)}
+      {def.elements && (
+        <StructureElementEditor
+          definitions={def.elements}
+          elements={data.elements ?? []}
+          index={index}
         />
-      ))}
+      )}
     </div>
   );
 };
