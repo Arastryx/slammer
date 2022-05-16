@@ -4,6 +4,7 @@ import styles from "./NodeEditor.module.css";
 import { SlamEditorElement, SlamElementDefinition } from "../SlamXML/slam";
 import { StructureElementEditor } from "./Elements/StructureElementEditor";
 import { AttributeEditor } from "./Attributes";
+import { useSlamElement } from "../SlamXML/SlamContext";
 
 export interface NodeEditorProps {
   def?: SlamElementDefinition;
@@ -12,6 +13,8 @@ export interface NodeEditorProps {
 }
 
 export const NodeEditor: React.FC<NodeEditorProps> = ({ def, data, index }) => {
+  const { addElement } = useSlamElement(index);
+
   if (!def) {
     return null;
   }
@@ -35,6 +38,7 @@ export const NodeEditor: React.FC<NodeEditorProps> = ({ def, data, index }) => {
           definitions={def.elements}
           elements={data.elements ?? []}
           index={index}
+          onAdd={addElement}
         />
       )}
     </div>

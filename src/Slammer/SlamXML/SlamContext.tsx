@@ -74,6 +74,33 @@ function getElement(
     : getElement(target.elements![index[0]], index.slice(1));
 }
 
+export function useSlamElement(index: number[]) {
+  const result = useContext(SlamContextContext);
+
+  if (result === null) {
+    throw new Error(
+      "useSlamContext() cannot be used without being wrapped by a SlamContext"
+    );
+  }
+
+  const addElement = useCallback(
+    (def: SlamElementDefinition) => {
+      const root = cloneDeep(result.editorData);
+      const element = getElement(root, index);
+
+      if (element.elements == null) {
+        element.elements = [];
+      }
+
+      element.elements.push(build(def));
+      result.onEditorChange && result.onEditorChange(element);
+    },
+    [result]
+  );
+
+  return { addElement };
+}
+
 export function useSlamAttribute<T extends string | number | boolean>(
   index: number[],
   name: string
