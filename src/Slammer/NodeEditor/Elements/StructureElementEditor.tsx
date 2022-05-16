@@ -1,6 +1,7 @@
 import { PlusOutlined } from "@ant-design/icons";
 import { Button } from "antd";
 import React from "react";
+import { Stack } from "../../../Common/Stack";
 import { SlamEditorElement, SlamElementDefinition } from "../../SlamXML/slam";
 import { NodeEditor } from "../NodeEditor";
 
@@ -42,7 +43,7 @@ export const StructureElementEditor: React.FC<StructureElementEditorProps> = ({
   onAdd,
 }) => {
   return (
-    <>
+    <Stack direction="vertical" gap={10}>
       {definitions.map((def) => {
         const eleIndex = elements.findIndex((e) => e.name === def.name);
 
@@ -56,6 +57,6 @@ export const StructureElementEditor: React.FC<StructureElementEditorProps> = ({
           />
         );
       })}
-    </>
+    </Stack>
   );
 };

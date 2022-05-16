@@ -31,7 +31,7 @@ export interface SlamEditorElement {
   name: string;
   id: number;
   attributes?: SlamEditorAttribute[];
-  elements?: SlamEditorElement[];
+  elements: SlamEditorElement[];
 }
 
 let idCounter = 1;
@@ -48,7 +48,8 @@ export function build(def: SlamElementDefinition): SlamEditorElement {
       name: a.name,
       value: "",
     })),
-    elements: def.required ? def.elements?.map((e) => build(e)) : undefined,
+    elements:
+      def.elements?.filter((e) => e.required).map((e) => build(e)) ?? [],
   };
 }
 

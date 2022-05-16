@@ -37,8 +37,18 @@ const slamElement: SlamElement = {
   ],
   elements: [
     {
+      name: "Speakers",
+    },
+    {
+      name: "Voices",
+    },
+    {
+      name: "ResourcePacks",
+    },
+    {
       name: "Moves",
       attributes: [{ name: "theBigTest", type: "string" }],
+      required: true,
     },
   ],
 };
@@ -65,11 +75,12 @@ export const Slammer: React.FC<SlammerProps> = ({}) => {
       >
         <NodeEditor def={slamElement} data={editorData} index={[]} />
       </SlamContext>
-
-      <pre className={styles.output}>
-        {'<?xml version="1.0" encoding="utf-8"?>\n'}
-        {output}
-      </pre>
+      <div>
+        <pre className={styles.output}>
+          {'<?xml version="1.0" encoding="utf-8"?>\n'}
+          {output}
+        </pre>
+      </div>
     </div>
   );
 };

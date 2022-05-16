@@ -95,10 +95,17 @@ export function useSlamElement(index: number[]) {
       element.elements.push(build(def));
       result.onEditorChange && result.onEditorChange(element);
     },
-    [result]
+    [index, result]
   );
 
-  return { addElement };
+  const remove = useCallback(() => {
+    const root = cloneDeep(result.editorData);
+    const element = getElement(root, index.slice(0, -1));
+    element.elements?.splice(index[index.length - 1], 1);
+    result.onEditorChange && result.onEditorChange(element);
+  }, [index, result]);
+
+  return { addElement, remove };
 }
 
 export function useSlamAttribute<T extends string | number | boolean>(

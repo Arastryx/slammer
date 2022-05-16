@@ -5,6 +5,7 @@ import { SlamEditorElement, SlamElementDefinition } from "../SlamXML/slam";
 import { StructureElementEditor } from "./Elements/StructureElementEditor";
 import { AttributeEditor } from "./Attributes";
 import { useSlamElement } from "../SlamXML/SlamContext";
+import { CloseOutlined } from "@ant-design/icons";
 
 export interface NodeEditorProps {
   def?: SlamElementDefinition;
@@ -13,7 +14,7 @@ export interface NodeEditorProps {
 }
 
 export const NodeEditor: React.FC<NodeEditorProps> = ({ def, data, index }) => {
-  const { addElement } = useSlamElement(index);
+  const { addElement, remove } = useSlamElement(index);
 
   if (!def) {
     return null;
@@ -25,11 +26,20 @@ export const NodeEditor: React.FC<NodeEditorProps> = ({ def, data, index }) => {
       style={{ "--hue": index.length * 60 } as React.CSSProperties}
     >
       <div className={styles.header}>
-        <Stack gap={30} alignment="end" style={{ justifyContent: "start" }}>
-          <div className={styles.label}>{data.name}</div>
-          {def.attributes?.map((a) => (
-            <AttributeEditor key={a.name} attribute={a} index={index} />
-          ))}
+        <Stack gap="apart" fill alignment="middle">
+          <Stack gap={30} alignment="end">
+            <div className={styles.label}>{data.name}</div>
+            {def.attributes?.map((a) => (
+              <AttributeEditor key={a.name} attribute={a} index={index} />
+            ))}
+          </Stack>
+          {!def.required && index.length != 0 && (
+            <div className={styles.closeButton} onClick={remove}>
+              <CloseOutlined
+                style={{ color: `hsl(${index.length * 60}, 100%, 23%)` }}
+              />
+            </div>
+          )}
         </Stack>
       </div>
 
