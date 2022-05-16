@@ -24,16 +24,20 @@
   line-height: 17px;
 }
 
-.closeButton {
+.button {
   padding: 6px 10px;
   border-radius: 10px;
   cursor: pointer;
 }
 
-.closeButton:hover {
+.button svg {
+  transition: 0.2s;
+}
+
+.button:hover {
   background-color: hsl(var(--hue), 74%, 63%);
 }
 
-.closeButton:hover:active {
+.button:hover:active {
   background-color: hsl(var(--hue), 68%, 55%);
 }
