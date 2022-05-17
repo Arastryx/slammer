@@ -48,7 +48,7 @@ const slamElement: SlamElement = {
     {
       name: "Moves",
       attributes: [{ name: "default", type: "string" }],
-      type: "listing",
+      type: "slot",
       elements: [{ name: "Move" }, { name: "CoolMove" }],
       required: true,
     },
