@@ -47,7 +47,9 @@ const slamElement: SlamElement = {
     },
     {
       name: "Moves",
-      attributes: [{ name: "theBigTest", type: "string" }],
+      attributes: [{ name: "default", type: "string" }],
+      type: "listing",
+      elements: [{ name: "Move" }, { name: "CoolMove" }],
       required: true,
     },
   ],

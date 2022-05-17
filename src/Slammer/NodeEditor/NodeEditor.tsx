@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import { Stack } from "../../Common/Stack";
 import styles from "./NodeEditor.module.css";
 import { SlamEditorElement, SlamElementDefinition } from "../SlamXML/slam";
-import { StructureElementEditor } from "./Elements/StructureElementEditor";
 import { AttributeEditor } from "./Attributes";
 import { useSlamElement } from "../SlamXML/SlamContext";
 import { CloseOutlined, RightOutlined } from "@ant-design/icons";
 import Collapse from "@kunukn/react-collapse";
+import { ElementEditor } from "./Elements";
 
 export interface NodeEditorProps {
   def?: SlamElementDefinition;
@@ -58,7 +58,8 @@ export const NodeEditor: React.FC<NodeEditorProps> = ({ def, data, index }) => {
 
       <Collapse isOpen={open}>
         {def.elements && (
-          <StructureElementEditor
+          <ElementEditor
+            type={def.type}
             definitions={def.elements}
             elements={data.elements ?? []}
             index={index}

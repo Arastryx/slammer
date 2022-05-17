@@ -5,11 +5,13 @@ export interface SlamAttributeDefinition {
   type: AttributeType;
 }
 
+export type SlamElementType = "structure" | "slot" | "listing";
+
 export interface SlamElementDefinition {
   name: string;
   attributes?: SlamAttributeDefinition[];
   elements?: SlamElementDefinition[];
-  type?: "structure" | "slot" | "listing";
+  type?: SlamElementType;
   required?: boolean;
 }
 

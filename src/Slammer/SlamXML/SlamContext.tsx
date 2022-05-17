@@ -69,9 +69,11 @@ function getElement(
   target: SlamEditorElement,
   index: number[]
 ): SlamEditorElement {
-  return index.length === 0
-    ? target
-    : getElement(target.elements![index[0]], index.slice(1));
+  if (index.length === 0) {
+    return target;
+  } else {
+    return getElement(target.elements![index[0]], index.slice(1));
+  }
 }
 
 export function useSlamElement(index: number[]) {
@@ -93,7 +95,7 @@ export function useSlamElement(index: number[]) {
       }
 
       element.elements.push(build(def));
-      result.onEditorChange && result.onEditorChange(element);
+      result.onEditorChange && result.onEditorChange(root);
     },
     [index, result]
   );
@@ -102,7 +104,7 @@ export function useSlamElement(index: number[]) {
     const root = cloneDeep(result.editorData);
     const element = getElement(root, index.slice(0, -1));
     element.elements?.splice(index[index.length - 1], 1);
-    result.onEditorChange && result.onEditorChange(element);
+    result.onEditorChange && result.onEditorChange(root);
   }, [index, result]);
 
   return { addElement, remove };

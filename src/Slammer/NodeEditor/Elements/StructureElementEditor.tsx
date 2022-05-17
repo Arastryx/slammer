@@ -4,6 +4,7 @@ import React from "react";
 import { Stack } from "../../../Common/Stack";
 import { SlamEditorElement, SlamElementDefinition } from "../../SlamXML/slam";
 import { NodeEditor } from "../NodeEditor";
+import { ElementEditorProps } from "./ElementEditor";
 
 interface OptionalElementProps {
   definition: SlamElementDefinition;
@@ -29,14 +30,7 @@ const OptionalElement: React.FC<OptionalElementProps> = ({
   }
 };
 
-export interface StructureElementEditorProps {
-  definitions: SlamElementDefinition[];
-  elements: SlamEditorElement[];
-  index: number[];
-  onAdd?: (def: SlamElementDefinition) => void;
-}
-
-export const StructureElementEditor: React.FC<StructureElementEditorProps> = ({
+export const StructureElementEditor: React.FC<ElementEditorProps> = ({
   elements,
   definitions,
   index,
