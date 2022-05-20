@@ -1,9 +1,15 @@
 import { XMLBuilder, XMLParser } from "fast-xml-parser";
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
+import { DefinitionSelector } from "./DefinitionSelector";
 import { NodeEditor } from "./NodeEditor/NodeEditor";
 import styles from "./Slammer.module.css";
 import { SlamContext, SlamElement } from "./SlamXML";
-import { build, SlamEditorElement, toJsonifiedXML } from "./SlamXML/slam";
+import {
+  build,
+  SlamEditorElement,
+  SlamElementDefinition,
+  toJsonifiedXML,
+} from "./SlamXML/slam";
 
 // const parser = new XMLParser({
 //   parseAttributeValue: true,
@@ -26,56 +32,58 @@ const builder = new XMLBuilder({
   format: true,
 });
 
-export interface SlammerProps {}
+export interface SlammerProps {
+  definitions: SlamElementDefinition[];
+}
 
-const slamElement: SlamElement = {
-  name: "Character",
-  attributes: [
-    { name: "cool", type: "string" },
-    { name: "num", type: "number" },
-    { name: "bool", type: "boolean" },
-  ],
-  elements: [
-    {
-      name: "Speakers",
-    },
-    {
-      name: "Voices",
-    },
-    {
-      name: "ResourcePacks",
-    },
-    {
-      name: "Moves",
-      attributes: [{ name: "default", type: "string" }],
-      type: "slot",
-      elements: [{ name: "Move" }, { name: "CoolMove" }],
-      required: true,
-    },
-  ],
-};
+export const Slammer: React.FC<SlammerProps> = ({ definitions }) => {
+  const [currentDef, setCurrentDef] = useState<string>();
 
-export const Slammer: React.FC<SlammerProps> = ({}) => {
-  const [editorData, setEditorData] = useState<SlamEditorElement>(
-    build(slamElement)
-  );
-  const [data, setData] = useState(toJsonifiedXML(editorData));
+  const [editorData, setEditorData] = useState<SlamEditorElement>();
+  const [data, setData] = useState<any>();
 
   const output = useMemo(
     () => (data ? (builder.build([data]) as string).substring(1) : undefined),
     [data]
   );
 
+  useEffect(() => {
+    const targetDef = definitions.find((d) => d.name === currentDef);
+
+    if (targetDef) {
+      const editorData = build(targetDef);
+      setEditorData(editorData);
+      setData(toJsonifiedXML(editorData));
+    } else {
+      setEditorData(undefined);
+      setData(undefined);
+    }
+  }, [currentDef, definitions]);
+
+  const targetDef = definitions.find((d) => d.name === currentDef);
+
+  if (!targetDef || !editorData || !data) {
+    return (
+      <div id={styles.slammer}>
+        <DefinitionSelector
+          definitions={definitions}
+          onSelect={setCurrentDef}
+        />
+      </div>
+    );
+  }
+
   return (
     <div id={styles.slammer}>
+      <div className={styles.header}>Slammer</div>
       <SlamContext
-        element={slamElement}
+        element={targetDef}
         data={data}
         onDataChange={setData}
         editorData={editorData}
         onEditorChange={setEditorData}
       >
-        <NodeEditor def={slamElement} data={editorData} index={[]} />
+        <NodeEditor def={targetDef} data={editorData} index={[]} />
       </SlamContext>
       <div>
         <pre className={styles.output}>

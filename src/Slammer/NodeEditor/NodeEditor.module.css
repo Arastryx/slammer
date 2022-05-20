@@ -15,7 +15,10 @@
 .header {
   background-color: hsl(var(--hue), 83%, 72%);
   padding: 5px 10px;
-  margin-bottom: 10px;
+}
+
+.body {
+  margin-top: 10px;
 }
 
 .label {
