@@ -28,23 +28,30 @@ export const NodeEditor: React.FC<NodeEditorProps> = ({ def, data, index }) => {
       style={{ "--hue": index.length * 60 } as React.CSSProperties}
     >
       <div className={styles.header}>
-        <Stack gap={10} fill alignment="middle">
-          {def.elements && def.elements.length > 0 && (
-            <div className={styles.button} onClick={() => setOpen(!open)}>
-              <RightOutlined
-                rotate={open ? 90 : 0}
-                style={{
-                  color: `hsl(${index.length * 60}, 100%, 23%)`,
-                }}
-              />
-            </div>
-          )}
+        <Stack gap="apart" fill alignment="middle">
+          <Stack
+            gap={10}
+            fill
+            alignment="middle"
+            style={{ justifyContent: "start", marginRight: 30 }}
+          >
+            {def.elements && def.elements.length > 0 && (
+              <div className={styles.button} onClick={() => setOpen(!open)}>
+                <RightOutlined
+                  rotate={open ? 90 : 0}
+                  style={{
+                    color: `hsl(${index.length * 60}, 100%, 23%)`,
+                  }}
+                />
+              </div>
+            )}
 
-          <Stack gap={30} alignment="end">
-            <div className={styles.label}>{data.name}</div>
-            {def.attributes?.map((a) => (
-              <AttributeEditor key={a.name} attribute={a} index={index} />
-            ))}
+            <Stack gap={30} alignment="end">
+              <div className={styles.label}>{data.name}</div>
+              {def.attributes?.map((a) => (
+                <AttributeEditor key={a.name} attribute={a} index={index} />
+              ))}
+            </Stack>
           </Stack>
           {!def.required && index.length !== 0 && (
             <div className={styles.button} onClick={remove}>
