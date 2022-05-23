@@ -1,4 +1,4 @@
-import { SlamAttributeDefinition } from "../../SlamXML/slam";
+import { SlamAttributeDefinition } from "../../../SlamXML/slam";
 
 export interface AttributeEditorProps {
   attribute: SlamAttributeDefinition;

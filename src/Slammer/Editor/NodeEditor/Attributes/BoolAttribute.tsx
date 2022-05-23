@@ -1,7 +1,7 @@
 import { Input, Switch } from "antd";
 import React from "react";
-import { Stack } from "../../../Common/Stack";
-import { useSlamAttribute } from "../../SlamXML/SlamContext";
+import { Stack } from "../../../../Common/Stack";
+import { useSlamAttribute } from "../../../SlamXML/SlamContext";
 import { AttributeEditorProps } from "./attributeEditorProps";
 import styles from "./AttributeEditor.module.css";
 

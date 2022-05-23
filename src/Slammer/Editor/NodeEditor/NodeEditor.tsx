@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { Stack } from "../../Common/Stack";
+import { Stack } from "../../../Common/Stack";
 import styles from "./NodeEditor.module.css";
-import { SlamEditorElement, SlamElementDefinition } from "../SlamXML/slam";
+import { SlamEditorElement, SlamElementDefinition } from "../../SlamXML/slam";
 import { AttributeEditor } from "./Attributes";
-import { useSlamElement } from "../SlamXML/SlamContext";
+import { useSlamElement } from "../../SlamXML/SlamContext";
 import { CloseOutlined, RightOutlined } from "@ant-design/icons";
 import Collapse from "@kunukn/react-collapse";
 import { ElementEditor } from "./Elements";

@@ -1,20 +1,38 @@
 import React, { useEffect, useMemo, useState } from "react";
-import styles from "./Editor.module.css";
-import { NodeEditor } from "./NodeEditor/NodeEditor";
-import { SlamContext } from "./SlamXML";
+import { useParams, useNavigate } from "react-router-dom";
+import { SlamContext } from "../SlamXML";
 import {
-  SlamEditorElement,
   SlamElementDefinition,
   toEditorData,
   toJsonifiedXML,
   toXML,
-} from "./SlamXML/slam";
+} from "../SlamXML/slam";
+import styles from "./Editor.module.css";
+import { NodeEditor } from "./NodeEditor/NodeEditor";
 
 export interface EditorProps {
+  definitions: SlamElementDefinition[];
+}
+
+export const Editor: React.FC<EditorProps> = ({ definitions }) => {
+  const { def } = useParams<{ def: string }>();
+  const push = useNavigate();
+
+  const definition = definitions.find((d) => d.name === def);
+
+  if (!definition) {
+    push("/");
+    return null;
+  }
+
+  return <InternalEditor definition={definition} />;
+};
+
+interface InternalEditorProps {
   definition: SlamElementDefinition;
 }
 
-export const Editor: React.FC<EditorProps> = ({ definition }) => {
+const InternalEditor: React.FC<InternalEditorProps> = ({ definition }) => {
   const [editorData, setEditorData] = useState(toEditorData(definition));
   const [data, setData] = useState(toJsonifiedXML(editorData));
 

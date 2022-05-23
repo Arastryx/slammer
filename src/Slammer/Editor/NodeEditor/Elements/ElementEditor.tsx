@@ -3,7 +3,7 @@ import {
   SlamEditorElement,
   SlamElementDefinition,
   SlamElementType,
-} from "../../SlamXML/slam";
+} from "../../../SlamXML/slam";
 import { ListingElementEditor } from "./ListingElementEditor";
 import { SlotElementEditor } from "./SlotElementEditor";
 import { StructureElementEditor } from "./StructureElementEditor";

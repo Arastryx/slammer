@@ -1,11 +1,11 @@
 import { PlusOutlined } from "@ant-design/icons";
 import { Button, Select } from "antd";
 import React from "react";
-import { Stack } from "../../../Common/Stack";
+import { Stack } from "../../../../Common/Stack";
 import { NodeEditor } from "../NodeEditor";
 import { ElementEditorProps } from "./ElementEditor";
 
-export const ListingElementEditor: React.FC<ElementEditorProps> = ({
+export const SlotElementEditor: React.FC<ElementEditorProps> = ({
   elements,
   definitions,
   index,
@@ -13,28 +13,18 @@ export const ListingElementEditor: React.FC<ElementEditorProps> = ({
 }) => {
   return (
     <Stack direction="vertical" gap={10}>
-      {elements.map((e, i) => (
+      {elements.length > 0 && (
         <NodeEditor
-          key={e.id}
-          data={e}
-          def={definitions.find((d) => d.name === e.name)}
-          index={index.concat(i)}
+          key={elements[0].id}
+          data={elements[0]}
+          def={definitions.find((d) => d.name === elements[0].name)}
+          index={index.concat(0)}
         />
-      ))}
-
-      {definitions.length === 1 && (
-        <Button
-          icon={<PlusOutlined />}
-          size="large"
-          onClick={() => onAdd && onAdd(definitions[0])}
-        >
-          {definitions[0].name}
-        </Button>
       )}
-      {definitions.length > 1 && (
+      {elements.length === 0 && (
         <Select
           size="large"
-          placeholder={"Add an element"}
+          placeholder={"Set element"}
           value={null}
           onSelect={(v: string | null) =>
             onAdd && onAdd(definitions.find((d) => d.name === v)!)
@@ -42,7 +32,7 @@ export const ListingElementEditor: React.FC<ElementEditorProps> = ({
         >
           {definitions.map((d) => (
             <Select.Option key={d.name} value={d.name}>
-              <PlusOutlined /> {d.name}
+              {d.name}
             </Select.Option>
           ))}
         </Select>

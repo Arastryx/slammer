@@ -1,8 +1,11 @@
 import { PlusOutlined } from "@ant-design/icons";
 import { Button } from "antd";
 import React from "react";
-import { Stack } from "../../../Common/Stack";
-import { SlamEditorElement, SlamElementDefinition } from "../../SlamXML/slam";
+import { Stack } from "../../../../Common/Stack";
+import {
+  SlamEditorElement,
+  SlamElementDefinition,
+} from "../../../SlamXML/slam";
 import { NodeEditor } from "../NodeEditor";
 import { ElementEditorProps } from "./ElementEditor";
 

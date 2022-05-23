@@ -1,6 +1,7 @@
 import React, { useState } from "react";
+import { HashRouter, Route, Routes } from "react-router-dom";
 import { DefinitionSelector } from "./DefinitionSelector";
-import { Editor } from "./Editor";
+import { Editor } from "./Editor/Editor";
 import styles from "./Slammer.module.css";
 import { SlamElementDefinition } from "./SlamXML/slam";
 
@@ -9,23 +10,20 @@ export interface SlammerProps {
 }
 
 export const Slammer: React.FC<SlammerProps> = ({ definitions }) => {
-  const [currentDef, setCurrentDef] = useState<string>();
-  const targetDef = definitions.find((d) => d.name === currentDef);
-
-  if (!targetDef) {
-    return (
-      <div id={styles.slammer}>
-        <DefinitionSelector
-          definitions={definitions}
-          onSelect={setCurrentDef}
-        />
-      </div>
-    );
-  }
-
   return (
     <div id={styles.slammer}>
-      <Editor definition={targetDef} />
+      <HashRouter>
+        <Routes>
+          <Route
+            path="/"
+            element={<DefinitionSelector definitions={definitions} />}
+          ></Route>
+          <Route
+            path="/editor/:def"
+            element={<Editor definitions={definitions} />}
+          ></Route>
+        </Routes>
+      </HashRouter>
     </div>
   );
 };
