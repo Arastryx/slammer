@@ -2,20 +2,23 @@ import { Button } from "antd";
 import React from "react";
 import { Stack } from "../Common/Stack";
 import { SlamElementDefinition } from "./SlamXML/slam";
-import styles from "./DefinitionSelector.module.css";
-import { PlusOutlined } from "@ant-design/icons";
+import styles from "./Home.module.css";
+import { PlusOutlined, UploadOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 
-export interface DefinitionSelectorProps {
+export interface HomeProps {
   definitions: SlamElementDefinition[];
 }
 
-export const DefinitionSelector: React.FC<DefinitionSelectorProps> = ({
-  definitions,
-}) => {
+export const Home: React.FC<HomeProps> = ({ definitions }) => {
   return (
     <div>
-      <div className={styles.header}>Select a file type</div>
+      <Link to="/import-def">
+        <Button type="primary" size="large" icon={<UploadOutlined />}>
+          Import Definition
+        </Button>
+      </Link>
+      <div className={styles.header}>Or select a file type</div>
       <Stack direction="vertical" gap={20}>
         {definitions.map((d) => (
           <Link key={d.name} to={`/editor/${d.name}`}>

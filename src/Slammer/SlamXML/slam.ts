@@ -60,10 +60,14 @@ function getId() {
   return idCounter++;
 }
 
-export function toDefinition(xml: string) {
-  return editorDataToDefinition(
-    jsonifiedXMLToEditorData(xmlToJsonifiedXML(xml))
-  );
+export function toDefinition(xml: string): SlamElementDefinition | string {
+  try {
+    return editorDataToDefinition(
+      jsonifiedXMLToEditorData(xmlToJsonifiedXML(xml))
+    );
+  } catch (e) {
+    return "Invalid XML: Failed to translate XML into definition.";
+  }
 }
 
 export function toEditorData(def: SlamElementDefinition): SlamEditorElement {
@@ -102,7 +106,7 @@ function editorDataToJsonifiedXML(data: SlamEditorElement) {
 }
 
 function xmlToJsonifiedXML(xml: string) {
-  return parser.parse(xml);
+  return parser.parse(xml)[0];
 }
 
 function jsonifiedXMLToEditorData(data: any): SlamEditorElement {
@@ -139,15 +143,17 @@ function jsonifiedXMLToEditorData(data: any): SlamEditorElement {
 function editorDataToDefinition(
   data: SlamEditorElement
 ): SlamElementDefinition {
-  return {
+  const def: SlamElementDefinition = {
     name: data.name,
-    type:
-      new Set(data.elements.map((e) => e.name)).size > data.elements.length
-        ? "listing"
-        : "structure",
     attributes: data.attributes?.map(editorAttributeToDefinition),
     elements: data.elements.map(editorDataToDefinition),
   };
+
+  if (new Set(data.elements.map((e) => e.name)).size > data.elements.length) {
+    def.type = "listing";
+  }
+
+  return def;
 }
 
 function editorAttributeToDefinition(
