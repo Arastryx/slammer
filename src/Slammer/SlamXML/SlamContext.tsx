@@ -9,7 +9,7 @@ import React, {
 } from "react";
 import { useDebouncedEffect } from "../../Common/useDebouncedEffect";
 import {
-  build,
+  toEditorData,
   SlamEditorElement,
   SlamElementDefinition,
   toJsonifiedXML,
@@ -40,7 +40,7 @@ export const SlamContext: React.FC<SlamContextProps> = ({
   onEditorChange,
 }) => {
   useEffect(() => {
-    onEditorChange && onEditorChange(build(element));
+    onEditorChange && onEditorChange(toEditorData(element));
   }, [element, onEditorChange]);
 
   useDebouncedEffect(
@@ -94,7 +94,7 @@ export function useSlamElement(index: number[]) {
         element.elements = [];
       }
 
-      element.elements.push(build(def));
+      element.elements.push(toEditorData(def));
       result.onEditorChange && result.onEditorChange(root);
     },
     [index, result]
