@@ -71,8 +71,10 @@ function getElement(
 ): SlamEditorElement {
   if (index.length === 0) {
     return target;
+  } else if (Array.isArray(target.elements)) {
+    return getElement(target.elements[index[0]], index.slice(1));
   } else {
-    return getElement(target.elements![index[0]], index.slice(1));
+    throw new Error("Tried to return an element from a string");
   }
 }
 
@@ -90,8 +92,8 @@ export function useSlamElement(index: number[]) {
       const root = cloneDeep(result.editorData);
       const element = getElement(root, index);
 
-      if (element.elements == null) {
-        element.elements = [];
+      if (!Array.isArray(element.elements)) {
+        throw new Error("Tried to add an element to a string");
       }
 
       element.elements.push(toEditorData(def));
@@ -103,6 +105,11 @@ export function useSlamElement(index: number[]) {
   const remove = useCallback(() => {
     const root = cloneDeep(result.editorData);
     const element = getElement(root, index.slice(0, -1));
+
+    if (!Array.isArray(element.elements)) {
+      throw new Error("This should not even be possible");
+    }
+
     element.elements?.splice(index[index.length - 1], 1);
     result.onEditorChange && result.onEditorChange(root);
   }, [index, result]);

@@ -1,15 +1,19 @@
 import React, { useState } from "react";
 import { Stack } from "../../../Common/Stack";
 import styles from "./NodeEditor.module.css";
-import { SlamEditorElement, SlamElementDefinition } from "../../SlamXML/slam";
+import {
+  SlamEditorElement,
+  SlamNestedElementDefinition,
+} from "../../SlamXML/slam";
 import { AttributeEditor } from "./Attributes";
 import { useSlamElement } from "../../SlamXML/SlamContext";
 import { CloseOutlined, RightOutlined } from "@ant-design/icons";
 import Collapse from "@kunukn/react-collapse";
 import { ElementEditor } from "./Elements";
+import TextArea from "antd/lib/input/TextArea";
 
 export interface NodeEditorProps {
-  def?: SlamElementDefinition;
+  def?: SlamNestedElementDefinition;
   data: SlamEditorElement;
   index: number[];
 }
@@ -69,13 +73,14 @@ export const NodeEditor: React.FC<NodeEditorProps> = ({ def, data, index }) => {
             <ElementEditor
               type={def.type}
               definitions={def.elements}
-              elements={data.elements ?? []}
+              elements={Array.isArray(data.elements) ? data.elements : []}
               index={index}
               onAdd={addElement}
             />
           </Collapse>
         </div>
       )}
+      {def.type === "text" && <TextArea style={{ minWidth: 300 }}></TextArea>}
     </div>
   );
 };

@@ -7,15 +7,26 @@ export interface SlamAttributeDefinition {
   type: AttributeType;
 }
 
-export type SlamElementType = "structure" | "slot" | "listing";
+export type SlamElementType = "structure" | "slot" | "listing" | "text";
 
-export interface SlamElementDefinition {
+interface BaseSlamElement {
   name: string;
   attributes?: SlamAttributeDefinition[];
-  elements?: SlamElementDefinition[];
+}
+
+export interface SlamNestedElementDefinition extends BaseSlamElement {
   type?: SlamElementType;
+  elements?: SlamElementDefinition[];
   required?: boolean;
 }
+
+export interface SlamTextElementDefinition extends BaseSlamElement {
+  type: "text";
+}
+
+export type SlamElementDefinition =
+  | SlamNestedElementDefinition
+  | SlamTextElementDefinition;
 
 interface SlamEditorBaseAttribute<T> {
   name: string;
@@ -35,7 +46,7 @@ export interface SlamEditorElement {
   name: string;
   id: number;
   attributes?: SlamEditorAttribute[];
-  elements: SlamEditorElement[];
+  elements: SlamEditorElement[] | string;
 }
 
 let idCounter = 1;
@@ -79,7 +90,11 @@ export function toEditorData(def: SlamElementDefinition): SlamEditorElement {
       value: "",
     })),
     elements:
-      def.elements?.filter((e) => e.required).map((e) => toEditorData(e)) ?? [],
+      def.type === "text"
+        ? ""
+        : def.elements
+            ?.filter((e) => e.type !== "text" && e.required)
+            .map((e) => toEditorData(e)) ?? [],
   };
 }
 
@@ -97,11 +112,14 @@ export function toXML(element: any) {
 
 function editorDataToJsonifiedXML(data: SlamEditorElement) {
   return {
-    [data.name]: data.elements?.map((e) => toJsonifiedXML(e)) ?? [],
+    [data.name]: Array.isArray(data.elements)
+      ? data.elements.map((e) => toJsonifiedXML(e))
+      : undefined,
     ":@": Object.fromEntries(
       data.attributes?.filter((a) => a.value).map((a) => [a.name, a.value]) ??
         []
     ),
+    "#text": typeof data.elements === "string" ? data.elements : undefined,
   };
 }
 
@@ -146,10 +164,15 @@ function editorDataToDefinition(
   const def: SlamElementDefinition = {
     name: data.name,
     attributes: data.attributes?.map(editorAttributeToDefinition),
-    elements: data.elements.map(editorDataToDefinition),
+    elements: Array.isArray(data.elements)
+      ? data.elements.map(editorDataToDefinition)
+      : undefined,
   };
 
-  if (new Set(data.elements.map((e) => e.name)).size > data.elements.length) {
+  if (
+    Array.isArray(data.elements) &&
+    new Set(data.elements.map((e) => e.name)).size > data.elements.length
+  ) {
     def.type = "listing";
   }
 

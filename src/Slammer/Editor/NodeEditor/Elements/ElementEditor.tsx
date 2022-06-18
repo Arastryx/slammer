@@ -7,6 +7,7 @@ import {
 import { ListingElementEditor } from "./ListingElementEditor";
 import { SlotElementEditor } from "./SlotElementEditor";
 import { StructureElementEditor } from "./StructureElementEditor";
+import { TextEditor } from "./TextEditor";
 
 export interface ElementEditorProps {
   type?: SlamElementType;
@@ -25,6 +26,8 @@ export const ElementEditor: React.FC<ElementEditorProps> = ({
       return <ListingElementEditor {...props} />;
     case "slot":
       return <SlotElementEditor {...props} />;
+    case "text":
+      return <TextEditor />;
     default:
       return <StructureElementEditor {...props} />;
   }
