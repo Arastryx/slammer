@@ -27,7 +27,7 @@ export const ElementEditor: React.FC<ElementEditorProps> = ({
     case "slot":
       return <SlotElementEditor {...props} />;
     case "text":
-      return <TextEditor />;
+      return <TextEditor index={props.index} />;
     default:
       return <StructureElementEditor {...props} />;
   }

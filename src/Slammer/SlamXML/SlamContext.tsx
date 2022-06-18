@@ -71,8 +71,26 @@ function getElement(
 ): SlamEditorElement {
   if (index.length === 0) {
     return target;
-  } else if (Array.isArray(target.elements)) {
-    return getElement(target.elements[index[0]], index.slice(1));
+  } else if (Array.isArray(target.contents)) {
+    return getElement(target.contents[index[0]], index.slice(1));
+  } else {
+    throw new Error("Tried to return an element from a string");
+  }
+}
+
+function getText(target: SlamEditorElement, index: number[]): string {
+  if (index.length === 0) {
+    if (typeof target.contents === "string") {
+      return target.contents;
+    } else {
+      throw new Error("Tried to return a string but found an element instead");
+    }
+  } else if (
+    index.length > 0 &&
+    typeof target !== "string" &&
+    Array.isArray(target.contents)
+  ) {
+    return getText(target.contents[index[0]], index.slice(1));
   } else {
     throw new Error("Tried to return an element from a string");
   }
@@ -92,11 +110,11 @@ export function useSlamElement(index: number[]) {
       const root = cloneDeep(result.editorData);
       const element = getElement(root, index);
 
-      if (!Array.isArray(element.elements)) {
+      if (!Array.isArray(element.contents)) {
         throw new Error("Tried to add an element to a string");
       }
 
-      element.elements.push(toEditorData(def));
+      element.contents.push(toEditorData(def));
       result.onEditorChange && result.onEditorChange(root);
     },
     [index, result]
@@ -106,11 +124,11 @@ export function useSlamElement(index: number[]) {
     const root = cloneDeep(result.editorData);
     const element = getElement(root, index.slice(0, -1));
 
-    if (!Array.isArray(element.elements)) {
+    if (!Array.isArray(element.contents)) {
       throw new Error("This should not even be possible");
     }
 
-    element.elements?.splice(index[index.length - 1], 1);
+    element.contents?.splice(index[index.length - 1], 1);
     result.onEditorChange && result.onEditorChange(root);
   }, [index, result]);
 
@@ -131,10 +149,10 @@ export function useSlamAttribute<T extends string | number | boolean>(
 
   const value = useMemo(
     () =>
-      result.editorData?.attributes?.find((a) => a.name === name)?.value as
-        | T
-        | undefined,
-    [name, result.editorData?.attributes]
+      getElement(result.editorData, index)?.attributes?.find(
+        (a) => a.name === name
+      )?.value as T | undefined,
+    [index, name, result.editorData]
   );
 
   const setValue = useCallback(
@@ -150,6 +168,35 @@ export function useSlamAttribute<T extends string | number | boolean>(
       }
     },
     [index, name, result]
+  );
+
+  return [value, setValue];
+}
+
+export function useSlamText(
+  index: number[]
+): [string, (value: string) => void] {
+  const result = useContext(SlamContextContext);
+
+  if (result === null) {
+    throw new Error(
+      "useSlamContext() cannot be used without being wrapped by a SlamContext"
+    );
+  }
+
+  const value = useMemo(
+    () => getText(result.editorData, index),
+    [index, result.editorData]
+  );
+
+  const setValue = useCallback(
+    (value: string) => {
+      const element = cloneDeep(result.editorData);
+      const targetElement = getElement(element, index);
+      targetElement.contents = value;
+      result.onEditorChange && result.onEditorChange(element);
+    },
+    [index, result]
   );
 
   return [value, setValue];

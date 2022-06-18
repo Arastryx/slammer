@@ -46,7 +46,7 @@ export interface SlamEditorElement {
   name: string;
   id: number;
   attributes?: SlamEditorAttribute[];
-  elements: SlamEditorElement[] | string;
+  contents: SlamEditorElement[] | string;
 }
 
 let idCounter = 1;
@@ -89,7 +89,7 @@ export function toEditorData(def: SlamElementDefinition): SlamEditorElement {
       name: a.name,
       value: "",
     })),
-    elements:
+    contents:
       def.type === "text"
         ? ""
         : def.elements
@@ -110,16 +110,22 @@ export function toXML(element: any) {
   return jsonifiedXMLToXML(element);
 }
 
-function editorDataToJsonifiedXML(data: SlamEditorElement) {
+function editorDataToJsonifiedXML(data: SlamEditorElement | string): any {
+  if (typeof data === "string") {
+    return {
+      "#text": data,
+    };
+  }
+
   return {
-    [data.name]: Array.isArray(data.elements)
-      ? data.elements.map((e) => toJsonifiedXML(e))
-      : undefined,
+    [data.name]:
+      typeof data.contents === "string"
+        ? [editorDataToJsonifiedXML(data.contents)]
+        : data.contents?.map((e) => editorDataToJsonifiedXML(e)),
     ":@": Object.fromEntries(
       data.attributes?.filter((a) => a.value).map((a) => [a.name, a.value]) ??
         []
     ),
-    "#text": typeof data.elements === "string" ? data.elements : undefined,
   };
 }
 
@@ -151,7 +157,7 @@ function jsonifiedXMLToEditorData(data: any): SlamEditorElement {
     name: elementName,
     id: getId(),
     attributes: attributes,
-    elements:
+    contents:
       data[elementName] != null
         ? data[elementName].map(jsonifiedXMLToEditorData)
         : [],
@@ -164,14 +170,14 @@ function editorDataToDefinition(
   const def: SlamElementDefinition = {
     name: data.name,
     attributes: data.attributes?.map(editorAttributeToDefinition),
-    elements: Array.isArray(data.elements)
-      ? data.elements.map(editorDataToDefinition)
+    elements: Array.isArray(data.contents)
+      ? data.contents.map(editorDataToDefinition)
       : undefined,
   };
 
   if (
-    Array.isArray(data.elements) &&
-    new Set(data.elements.map((e) => e.name)).size > data.elements.length
+    Array.isArray(data.contents) &&
+    new Set(data.contents.map((e) => e.name)).size > data.contents.length
   ) {
     def.type = "listing";
   }
@@ -194,5 +200,5 @@ function editorAttributeToDefinition(
 }
 
 export function jsonifiedXMLToXML(root: any) {
-  return builder.build(root);
+  return builder.build([root]);
 }

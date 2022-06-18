@@ -22,6 +22,7 @@ const button: SlamElementDefinition = {
 
 const text: SlamElementDefinition = {
   name: "Text",
+  attributes: [{ name: "font", type: "string" }],
   type: "text",
 };
 

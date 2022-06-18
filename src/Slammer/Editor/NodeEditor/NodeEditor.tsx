@@ -67,20 +67,17 @@ export const NodeEditor: React.FC<NodeEditorProps> = ({ def, data, index }) => {
         </Stack>
       </div>
 
-      {def.elements && (
-        <div className={styles.body}>
-          <Collapse isOpen={open}>
-            <ElementEditor
-              type={def.type}
-              definitions={def.elements}
-              elements={Array.isArray(data.elements) ? data.elements : []}
-              index={index}
-              onAdd={addElement}
-            />
-          </Collapse>
-        </div>
-      )}
-      {def.type === "text" && <TextArea style={{ minWidth: 300 }}></TextArea>}
+      <div className={styles.body}>
+        <Collapse isOpen={open}>
+          <ElementEditor
+            type={def.type}
+            definitions={def.elements ?? []}
+            elements={Array.isArray(data.contents) ? data.contents : []}
+            index={index}
+            onAdd={addElement}
+          />
+        </Collapse>
+      </div>
     </div>
   );
 };
